@@ -7,6 +7,12 @@ namespace GrabTheScreen
 {
     public class Auto
     {
+        // Du kannst die Eigenschaften des Modells mit C#-Properties darstellen.
+        // Properties kannst du wie ein Feld benutzen, aber du musst die 
+        // get- und set-Methoden nicht von Hand schreiben; das private Feld wird automatisch angelegt!
+        
+        // Bsp.: (ersetzt den private String model und die get- und set-Methode mit einer Zeile code!)
+        // public String model { get; set; }
         private String model;
         private String modelDescription;
         private String price;

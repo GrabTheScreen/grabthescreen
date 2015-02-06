@@ -1,3 +1,5 @@
-# Prototyp für Pattern Grab The Screen
+﻿# Prototyp "Grab The Screen"
 
-- Punkt
+Projekt im Rahmen einer Bachelorthesis an der HS Mannheim.
+
+

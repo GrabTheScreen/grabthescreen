@@ -104,11 +104,11 @@ namespace GrabTheScreen
         {
             Auto auto = new Auto();
             auto.setModel("Audi A3 Sportback");
-            auto.setModelDescription("Ambition 2.0 TDI clean diesel 6-Gang");
+            auto.setModelDescription("Ambition 2.0 TDI Clean Diesel 6-Gang");
             auto.setPrice("30.500,00 EUR");
             auto.setSource("Resources/small_audi.jpg");
 
-        
+
             Uri uri = new Uri(auto.getSource(), UriKind.Relative);
             BitmapImage imageBitmap = new BitmapImage(uri);
             Image thumbnail = new Image();
@@ -131,5 +131,38 @@ namespace GrabTheScreen
             placeholder_smartphone.Children.Add(newImage);
         }
 
+        public void GRID_Placeholder(object sender, TouchEventArgs e)
+        {
+            e.TouchDevice.GetIsTagRecognized();
+            //e.TouchDevice.GetTagData().Value;
+        }
+
+        private void OnVisualizationAdded(object sender, TagVisualizerEventArgs e)
+        {
+            CameraVisualization camera = (CameraVisualization)e.TagVisualization;
+            switch (camera.VisualizedTag.Value)
+            {
+                case 1:
+                    camera.CameraModel.Content = "ABCDEFGHIJKLM";
+                    camera.myEllipse.Fill = SurfaceColors.Accent1Brush;
+                    break;
+                case 2:
+                    camera.CameraModel.Content = "XXXXXXXXXXXXXXXXXXXX";
+                    camera.myEllipse.Fill = SurfaceColors.Accent2Brush;
+                    break;
+                case 3:
+                    camera.CameraModel.Content = "AAAAAAAAAAAAAA";
+                    camera.myEllipse.Fill = SurfaceColors.Accent3Brush;
+                    break;
+                case 4:
+                    camera.CameraModel.Content = "RIRIRIRIIRIRIRIRIRIRI";
+                    camera.myEllipse.Fill = SurfaceColors.Accent4Brush;
+                    break;
+                default:
+                    camera.CameraModel.Content = "UNKNOWN MODEL";
+                    camera.myEllipse.Fill = SurfaceColors.ControlAccentBrush;
+                    break;
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace GrabTheScreen
         
         // Bsp.: (ersetzt den private String model und die get- und set-Methode mit einer Zeile code!)
         // public String model { get; set; }
+        // Test für meinen ersten Commit
         private String model;
         private String modelDescription;
         private String price;

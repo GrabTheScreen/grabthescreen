@@ -16,6 +16,7 @@ using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 
+
 namespace GrabTheScreen
 {
     /// <summary>
@@ -100,26 +101,53 @@ namespace GrabTheScreen
             //TODO: disable audio, animations here
         }
 
+        // Erzeugung der Auto-Informationen und Autobild im rechten Block
         private void SurfaceWindow_Loaded(object sender, RoutedEventArgs e)
-        {
+        { 
+            // Auto Objekt erzeugen
             Auto auto = new Auto();
             auto.setModel("Audi A3 Sportback");
             auto.setModelDescription("Ambition 2.0 TDI Clean Diesel 6-Gang");
             auto.setPrice("30.500,00 EUR");
             auto.setSource("Resources/small_audi.jpg");
+            //car_information.
 
-
+            // Miniaturbild (thumbnail) erzeugen
             Uri uri = new Uri(auto.getSource(), UriKind.Relative);
             BitmapImage imageBitmap = new BitmapImage(uri);
             Image thumbnail = new Image();
             thumbnail.Source = imageBitmap;
-            thumbnail_car.Children.Add(thumbnail);
+            thumbnail_car.Children.Add(thumbnail);         
         }
 
+        // Methode, die aufgerufen wird bei Klick auf "grab it" Button
         private void btn_grabIt_Click(object sender, RoutedEventArgs e)
         {
+            // damit Miniatur-Bild erst zur Laufzeit angezeigt wird
             placeholder_smartphone.Children.Clear();
 
+            // Erstellen des Vizualizer's
+            TagVisualizer visualizer = new TagVisualizer();
+            visualizer.Name = "MyTagVisualizer";
+
+            // Visualization Definitionen
+            TagVisualizationDefinition tagDefinition = new TagVisualizationDefinition();
+
+            // Tag Value 0x1 - wichtig für Input Simulator
+            tagDefinition.Value = "0x1";
+            tagDefinition.Source = new Uri("CameraVisualization.xaml", UriKind.Relative);
+            tagDefinition.LostTagTimeout = 2000;
+            tagDefinition.MaxCount = 2;
+            tagDefinition.OrientationOffsetFromTag = 0;
+            tagDefinition.TagRemovedBehavior = TagRemovedBehavior.Fade;
+            tagDefinition.UsesTagOrientation = true;
+
+            // Definitionen dem Visualizer hinzufügen
+            visualizer.Definitions.Add(tagDefinition);
+
+            visualizer.VisualizationAdded += OnVisualizationAdded;
+
+            // Miniaturbild auf gts-Fläche
             Image newImage = new Image();
             newImage.Source = konfig_auto.Source;
 
@@ -128,41 +156,20 @@ namespace GrabTheScreen
             margin.Right = 20;
             newImage.Margin = margin;
 
+            // zur Laufzeit Bild und Visualizer erzeugen
             placeholder_smartphone.Children.Add(newImage);
+            placeholder_smartphone.Children.Add(visualizer);
         }
 
-        public void GRID_Placeholder(object sender, TouchEventArgs e)
-        {
-            e.TouchDevice.GetIsTagRecognized();
-            //e.TouchDevice.GetTagData().Value;
-        }
-
+        // erzeugt Tag-Bereich
         private void OnVisualizationAdded(object sender, TagVisualizerEventArgs e)
         {
             CameraVisualization camera = (CameraVisualization)e.TagVisualization;
-            switch (camera.VisualizedTag.Value)
-            {
-                case 1:
-                    camera.CameraModel.Content = "ABCDEFGHIJKLM";
-                    camera.myEllipse.Fill = SurfaceColors.Accent1Brush;
-                    break;
-                case 2:
-                    camera.CameraModel.Content = "XXXXXXXXXXXXXXXXXXXX";
-                    camera.myEllipse.Fill = SurfaceColors.Accent2Brush;
-                    break;
-                case 3:
-                    camera.CameraModel.Content = "AAAAAAAAAAAAAA";
-                    camera.myEllipse.Fill = SurfaceColors.Accent3Brush;
-                    break;
-                case 4:
-                    camera.CameraModel.Content = "RIRIRIRIIRIRIRIRIRIRI";
-                    camera.myEllipse.Fill = SurfaceColors.Accent4Brush;
-                    break;
-                default:
-                    camera.CameraModel.Content = "UNKNOWN MODEL";
-                    camera.myEllipse.Fill = SurfaceColors.ControlAccentBrush;
-                    break;
-            }
+            camera.GRABIT.Content = "Auflagefläche des Smartphones";
+            camera.myRectangle.Fill = SurfaceColors.Accent1Brush;
+
+            // HIER Auto Objekt (Miniatur + Infos) bauen und für Versand vorbereiten
+            // https://msdn.microsoft.com/de-de/library/system.web.script.serialization.javascriptserializer(v=vs.110).aspx
         }
     }
 }

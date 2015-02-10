@@ -4,12 +4,12 @@
     xmlns:s="http://schemas.microsoft.com/surface/2008"
     Loaded="CameraVisualization_Loaded">
 
-    <Grid Height="200" Width="200">
-        <Ellipse Name="myEllipse"
+    <Grid Height="440" Width="250">
+        <Rectangle Name="myRectangle"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"/>
-        <Label Name="CameraModel" 
-               Content="TEST" 
+        <Label Name="GRABIT" 
+               Content="grab it" 
                HorizontalAlignment="Center" 
                VerticalAlignment="Center"/>
     </Grid>

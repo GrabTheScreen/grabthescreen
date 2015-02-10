@@ -58,62 +58,17 @@
                     <Grid Grid.Row="0" Name="thumbnail_car" Width="319">
                         <!-- Miniatur Auto -->
                     </Grid>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Name="car_information" Width="319">
+                        <!-- Auto Informationen -->
+                       
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="3" Background="#FFF" >
-
-                    <s:TagVisualizer 
-            Name="MyTagVisualizer" 
-            VerticalAlignment="Stretch"
-            HorizontalAlignment="Stretch"
-            Background="White" 
-            Height="Auto" Width="Auto"
-            VisualizationAdded="OnVisualizationAdded">
-                        <s:TagVisualizer.Definitions>
-                            <s:TagVisualizationDefinition Value="0x1" 
-                                              Source="SurfaceWindow1.xaml"
-                                              LostTagTimeout="2000"
-                                              MaxCount="2"
-                                              OrientationOffsetFromTag="0"
-                                              PhysicalCenterOffsetFromTag="2,2" 
-                                              TagRemovedBehavior="Fade"
-                                              UsesTagOrientation="True"
-                                              />
-                            <s:TagVisualizationDefinition Value="0x2" 
-                                              Source="SurfaceWindow1.xaml"
-                                              LostTagTimeout="2000"
-                                              MaxCount="2"
-                                              OrientationOffsetFromTag="0"
-                                              PhysicalCenterOffsetFromTag="2,2" 
-                                              TagRemovedBehavior="Fade"
-                                              UsesTagOrientation="True"
-                                              />
-                            <s:TagVisualizationDefinition Value="0x3" 
-                                              Source="SurfaceWindow1.xaml"
-                                              LostTagTimeout="2000"
-                                              MaxCount="2"
-                                              OrientationOffsetFromTag="0"
-                                              PhysicalCenterOffsetFromTag="2,2" 
-                                              TagRemovedBehavior="Fade"
-                                              UsesTagOrientation="True"
-                                              />
-                            <s:TagVisualizationDefinition Value="0x4" 
-                                              Source="SurfaceWindow1.xaml"
-                                              LostTagTimeout="2000"
-                                              MaxCount="2"
-                                              OrientationOffsetFromTag="0"
-                                              PhysicalCenterOffsetFromTag="2,2" 
-                                              TagRemovedBehavior="Fade"
-                                              UsesTagOrientation="True"
-                                              />
-                        </s:TagVisualizer.Definitions>
-                    </s:TagVisualizer>
-                    
                     <Border CornerRadius="20" BorderBrush="#333" BorderThickness="2" Width="250" Margin="0,20" Height="440" VerticalAlignment="Top">
-                        <Grid Name="placeholder_smartphone"></Grid>
-                    </Border>
+                        <Grid Name="placeholder_smartphone">
 
+                        </Grid>
+                    </Border>
                 </Grid>
             </Grid>
             <!--END: Rechter Bereich-->

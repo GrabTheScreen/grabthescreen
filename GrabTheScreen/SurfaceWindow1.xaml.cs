@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
+using System.Web.Script;
+using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,6 +18,7 @@ using Microsoft.Surface;
 using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
+
 
 
 namespace GrabTheScreen
@@ -103,7 +107,7 @@ namespace GrabTheScreen
 
         // Erzeugung der Auto-Informationen und Autobild im rechten Block
         private void SurfaceWindow_Loaded(object sender, RoutedEventArgs e)
-        { 
+        {
             // Auto Objekt erzeugen
             Auto auto = new Auto();
             auto.setModel("Audi A3 Sportback");
@@ -117,7 +121,11 @@ namespace GrabTheScreen
             BitmapImage imageBitmap = new BitmapImage(uri);
             Image thumbnail = new Image();
             thumbnail.Source = imageBitmap;
-            thumbnail_car.Children.Add(thumbnail);         
+            thumbnail_car.Children.Add(thumbnail);
+
+            var json = new JavaScriptSerializer().Serialize(auto);
+            Console.WriteLine("Test: " + json);
+
         }
 
         // Methode, die aufgerufen wird bei Klick auf "grab it" Button

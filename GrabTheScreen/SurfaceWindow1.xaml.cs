@@ -20,7 +20,6 @@ using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 
 
-
 namespace GrabTheScreen
 {
     /// <summary>
@@ -28,6 +27,9 @@ namespace GrabTheScreen
     /// </summary>
     public partial class SurfaceWindow1 : SurfaceWindow
     {
+
+        Auto auto; 
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -109,12 +111,12 @@ namespace GrabTheScreen
         private void SurfaceWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Auto Objekt erzeugen
-            Auto auto = new Auto();
+            auto = new Auto();
             auto.setModel("Audi A3 Sportback");
-            auto.setModelDescription("Ambition 2.0 TDI Clean Diesel 6-Gang");
+            auto.setModelDescription("Ambition 2.0 TDI Clean Diesel");
             auto.setPrice("30.500,00 EUR");
             auto.setSource("Resources/small_audi.jpg");
-            //car_information.
+
 
             // Miniaturbild (thumbnail) erzeugen
             Uri uri = new Uri(auto.getSource(), UriKind.Relative);
@@ -123,9 +125,19 @@ namespace GrabTheScreen
             thumbnail.Source = imageBitmap;
             thumbnail_car.Children.Add(thumbnail);
 
-            var json = new JavaScriptSerializer().Serialize(auto);
-            Console.WriteLine("Test: " + json);
+            // var json = new JavaScriptSerializer().Serialize(auto);
+            // Console.WriteLine("Test: " + json);
 
+        }
+
+        // Ausgabe der Auto-Informationen im Rechten Block 
+        public void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            var grid = sender as Grid;
+            Label_carModel.Content = auto.getModel();
+            Label_carDescription.Content = auto.getModelDescription();
+            Label_carPrice.Content = auto.getPrice();
         }
 
         // Methode, die aufgerufen wird bei Klick auf "grab it" Button

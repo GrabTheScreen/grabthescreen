@@ -58,9 +58,11 @@
                     <Grid Grid.Row="0" Name="thumbnail_car" Width="319">
                         <!-- Miniatur Auto -->
                     </Grid>
-                    <Grid Grid.Row="1" Name="car_information" Width="319">
+                    <Grid Grid.Row="1" Name="car_information" Width="319" Loaded="Grid_Loaded">
                         <!-- Auto Informationen -->
-                       
+                        <Label Name="Label_carModel" FontSize="20" Foreground="black"/>
+                        <Label Name="Label_carDescription" FontSize="20" Foreground="black" Margin="0,40,0,0"/>
+                        <Label Name="Label_carPrice" FontSize="20" Foreground="black" Margin="0,80,0,0"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="3" Background="#FFF" >

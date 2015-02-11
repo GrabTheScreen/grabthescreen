@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -19,7 +21,6 @@ using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 
-
 namespace GrabTheScreen
 {
     /// <summary>
@@ -28,7 +29,7 @@ namespace GrabTheScreen
     public partial class SurfaceWindow1 : SurfaceWindow
     {
 
-        Auto auto; 
+        Auto auto;
 
         /// <summary>
         /// Default constructor.
@@ -93,7 +94,6 @@ namespace GrabTheScreen
         private void OnWindowNoninteractive(object sender, EventArgs e)
         {
             //TODO: Disable audio here if it is enabled
-
             //TODO: optionally enable animations here
         }
 
@@ -117,23 +117,17 @@ namespace GrabTheScreen
             auto.setPrice("30.500,00 EUR");
             auto.setSource("Resources/small_audi.jpg");
 
-
             // Miniaturbild (thumbnail) erzeugen
             Uri uri = new Uri(auto.getSource(), UriKind.Relative);
             BitmapImage imageBitmap = new BitmapImage(uri);
-            Image thumbnail = new Image();
+            System.Windows.Controls.Image thumbnail = new System.Windows.Controls.Image();
             thumbnail.Source = imageBitmap;
             thumbnail_car.Children.Add(thumbnail);
-
-            // var json = new JavaScriptSerializer().Serialize(auto);
-            // Console.WriteLine("Test: " + json);
-
         }
 
         // Ausgabe der Auto-Informationen im Rechten Block 
         public void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-
             var grid = sender as Grid;
             Label_carModel.Content = auto.getModel();
             Label_carDescription.Content = auto.getModelDescription();
@@ -164,13 +158,11 @@ namespace GrabTheScreen
 
             // Definitionen dem Visualizer hinzufügen
             visualizer.Definitions.Add(tagDefinition);
-
             visualizer.VisualizationAdded += OnVisualizationAdded;
 
             // Miniaturbild auf gts-Fläche
-            Image newImage = new Image();
+            System.Windows.Controls.Image newImage = new System.Windows.Controls.Image();
             newImage.Source = konfig_auto.Source;
-
             Thickness margin = newImage.Margin;
             margin.Left = 20;
             margin.Right = 20;
@@ -179,6 +171,22 @@ namespace GrabTheScreen
             // zur Laufzeit Bild und Visualizer erzeugen
             placeholder_smartphone.Children.Add(newImage);
             placeholder_smartphone.Children.Add(visualizer);
+
+            // WPF-Image zu Drawing-Image konvertieren
+            System.Drawing.Image drawingImage = ConvertWpfImageToImage(newImage);
+            String baseString = GetStringFromImage(drawingImage);
+
+            // Auto Transfer Objekt erzeugen (mit erbender Klasse AutoTO.cs)
+            AutoTO autoTo = new AutoTO();
+            autoTo.setModel(auto.getModel());
+            autoTo.setModelDescription(auto.getModelDescription());
+            autoTo.setPrice(auto.getPrice());
+            autoTo.setBaseString64(baseString);
+
+            //JSON-String erzeugen aus Objekt Auto und Base64-String (= autoTo)
+            var javaScriptSerializer = new JavaScriptSerializer();
+            string jsonString = javaScriptSerializer.Serialize(autoTo);
+            //Console.WriteLine("Auto-Objekt:" + jsonString);
         }
 
         // erzeugt Tag-Bereich
@@ -187,9 +195,35 @@ namespace GrabTheScreen
             CameraVisualization camera = (CameraVisualization)e.TagVisualization;
             camera.GRABIT.Content = "Auflagefläche des Smartphones";
             camera.myRectangle.Fill = SurfaceColors.Accent1Brush;
+        }
 
-            // HIER Auto Objekt (Miniatur + Infos) bauen und für Versand vorbereiten
-            // https://msdn.microsoft.com/de-de/library/system.web.script.serialization.javascriptserializer(v=vs.110).aspx
+        // kodiert Image in Base64 String
+        public static string GetStringFromImage(System.Drawing.Image image)
+        {
+            if (image != null)
+            {
+                ImageConverter ic = new ImageConverter();
+                byte[] buffer = (byte[])ic.ConvertTo(image, typeof(byte[]));
+                return Convert.ToBase64String(
+                    buffer,
+                    Base64FormattingOptions.InsertLineBreaks);
+            }
+            else
+                return null;
+        }
+
+        // Methode zur Konvertierung von System.Windows.Control.Image in System.Drawing
+        public static System.Drawing.Image ConvertWpfImageToImage(System.Windows.Controls.Image image)
+        {
+            if (image == null)
+                throw new ArgumentNullException("image", "Image darf nicht null sein.");
+
+            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+            MemoryStream ms = new MemoryStream();
+            encoder.Frames.Add(BitmapFrame.Create((BitmapSource)image.Source));
+            encoder.Save(ms);
+            System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+            return img;
         }
     }
 }

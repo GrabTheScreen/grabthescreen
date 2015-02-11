@@ -60,9 +60,9 @@
                     </Grid>
                     <Grid Grid.Row="1" Name="car_information" Width="319" Loaded="Grid_Loaded">
                         <!-- Auto Informationen -->
-                        <Label Name="Label_carModel" FontSize="20" Foreground="black"/>
-                        <Label Name="Label_carDescription" FontSize="20" Foreground="black" Margin="0,40,0,0"/>
-                        <Label Name="Label_carPrice" FontSize="20" Foreground="black" Margin="0,80,0,0"/>
+                        <Label Name="Label_carModel" FontSize="20" Foreground="DarkSlateGray" Margin="0,5,0,0" />
+                        <Label Name="Label_carDescription" FontSize="20" Foreground="DarkSlateGray" Margin="0,45,0,0"/>
+                        <Label Name="Label_carPrice" FontSize="20" Foreground="DarkSlateGray" Margin="0,85,0,0"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="3" Background="#FFF" >

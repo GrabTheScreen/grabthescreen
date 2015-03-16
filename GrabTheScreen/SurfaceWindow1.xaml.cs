@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Script;
@@ -30,6 +31,7 @@ namespace GrabTheScreen
     {
 
         Auto auto;
+        String baseString;
 
         /// <summary>
         /// Default constructor.
@@ -174,19 +176,22 @@ namespace GrabTheScreen
 
             // WPF-Image zu Drawing-Image konvertieren
             System.Drawing.Image drawingImage = ConvertWpfImageToImage(newImage);
-            String baseString = GetStringFromImage(drawingImage);
+            baseString = GetStringFromImage(drawingImage);
 
             // Auto Transfer Objekt erzeugen (mit erbender Klasse AutoTO.cs)
-            AutoTO autoTo = new AutoTO();
-            autoTo.setModel(auto.getModel());
-            autoTo.setModelDescription(auto.getModelDescription());
-            autoTo.setPrice(auto.getPrice());
-            autoTo.setBaseString64(baseString);
+            //AutoTO autoTo = new AutoTO();
+            //autoTo.setModel(auto.getModel());
+            //autoTo.setModelDescription(auto.getModelDescription());
+            //autoTo.setPrice(auto.getPrice());
+            //autoTo.setBaseString64(baseString);
 
             //JSON-String erzeugen aus Objekt Auto und Base64-String (= autoTo)
-            var javaScriptSerializer = new JavaScriptSerializer();
-            string jsonString = javaScriptSerializer.Serialize(autoTo);
+            //var javaScriptSerializer = new JavaScriptSerializer();
+            //string jsonString = javaScriptSerializer.Serialize(autoTo);
             //Console.WriteLine("Auto-Objekt:" + jsonString);
+
+            // Methodenaufruf, damit JSON-String auf den Server gepusht wird
+            postJSONtoServer();
         }
 
         // erzeugt Tag-Bereich
@@ -225,5 +230,31 @@ namespace GrabTheScreen
             System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
             return img;
         }
+
+        // Methode, die den JSON-String via HTTP POST auf den Server pusht 
+        // Methode wird aufgerufen nach Klick auf den "Grab it"-Button
+        public void postJSONtoServer()
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://141.19.142.50:28017/gts/pictures/");
+            httpWebRequest.ContentType = "text/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                // + "', image: '"+ baseString
+                string json = "{name: '" + auto.getModel() + "', type: '" + auto.getModelDescription() + "', price: '" + auto.getPrice() + "'}";
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+            }
+        }
+
+
     }
 }
